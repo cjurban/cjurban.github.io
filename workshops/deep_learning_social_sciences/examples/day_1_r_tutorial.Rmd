@@ -1,0 +1,263 @@
+---
+title: |
+  | A Short Tutorial
+  | Deep Learning with R:
+output:
+  html_document: default
+  pdf_document:
+    latex_engine: xelatex
+urlcolor: blue
+---
+
+
+```{r, echo=FALSE, message=FALSE}
+rm(list = ls())
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+```
+
+This document is intended as a brief tutorial on building basic deep learning models using R.
+
+First, let's [install the Keras R wrapper](https://cran.r-project.org/web/packages/keras/vignettes/index.html) (if we haven't already), then load the package.
+
+```{r, message=FALSE, warning=FALSE}
+# Keras R wrapper
+if(!require(keras)) {
+  devtools::install_github("rstudio/keras")
+  library(keras)
+  install_keras()
+}
+library(tensorflow)
+
+set.seed(123)
+set_random_seed(123)
+```
+
+Next, we'll simulate some data.
+
+Here's the setup: Imagine we ask people to perform some skilled task. We measure their stress levels and their performance on the task. However, some people have practiced the task before (they're "experts"), while some people haven't (they're "amateurs"). In both groups, performance peaks at the mean stress level and decreases as stress gets farther from the mean; however, experts have better average performance. The data looks like this:
+
+```{r}
+# expert
+stress1 = runif(1000, -2, 2)
+eps1 = rnorm(1000)
+performance1 = -2.5*stress1^2 + 10 + eps1
+
+# amateur
+stress2 = runif(1000, -2, 2)
+eps2 = rnorm(1000)
+performance2 = -2.5*stress2^2 + 7.5 + eps2
+
+X = cbind.data.frame(stress = c(stress1, stress2),
+                     performance = c(performance1, performance2),
+                     y = c(rep(0, 1000), rep(1, 1000)))
+
+plot(X$stress, X$performance, col = c("red", "blue")[as.factor(X$y)],
+     pch = 20, xlab = "Stress", ylab = "Performance", main = "Simulated Data")
+```
+
+In the above plot, experts are red and amateurs are blue.
+
+Let's say we want to predict expert vs. amateur using stress and performance scores. We hold out $20\%$ of the data as a test set; the remaining $80\%$ will be used for model fitting. How accurately does basic logistic regression predict the outcome of interest?
+
+```{r}
+# split into train and test sets
+train_idxs = sample(1:2000, 1600)
+X_train = X[train_idxs,]
+X_test = X[-train_idxs,]
+
+logit = glm(y ~ performance + stress,
+            family = binomial(link = "logit"),
+            data = X_train)
+preds = logit %>% predict(newdata = X_test, type = "response") %>% `>`(0.5)
+acc = length(which(preds == X_test$y)) / nrow(X_test)
+cat("Logistic regression accuracy = ", acc)
+```
+
+It's not super accurate. What does the decision boundary look like?
+
+```{r}
+grid = data.frame(expand.grid(x = seq(-2, 2, length.out = 100),
+                              y = seq(0, 11, length.out = 100)))
+colnames(grid) = c("stress", "performance")
+grid_probs = logit %>% predict(newdata = grid, type = "response")
+contour(x=seq(-2, 2, length.out = 100), y=seq(0, 11, length.out = 100),
+        z = matrix(grid_probs, nrow = 100), levels = 0.5,
+        col = "gray", drawlabels = FALSE, lwd = 2,
+        xlab = "Stress", ylab = "Performance", main = "Logistic Regression Decision Boundary")
+points(X_test, col=c("red", "blue")[as.factor(X_test$y)], pch = 20)
+```
+
+As expected, it's a straight line. The line doesn't do a great job of separating the outcome classes -- it likely isn't the optimal decision boundary.
+
+Now let's predict the outcome using a neural network (NN) built with [Keras](https://keras.rstudio.com/index.html).
+
+NNs are predictive models that are built by chaining together many processing steps called "layers". In Keras (and in most current deep learning software), NNs are constructed by specifying the number, order, kind, and sizes of the layers:
+
+```{r}
+# feedforward neural network model
+fnn = keras_model_sequential()
+fnn %>% 
+  layer_dense(units = 10, activation = 'elu', input_shape = c(2)) %>%
+  layer_dense(units = 10, activation = 'elu', input_shape = c(10)) %>%
+  layer_dense(units = 1, activation = 'sigmoid')
+```
+
+In the above, we specify the following model:
+\begin{align}
+\mathbf{h}_1 &= \text{ELU}(\mathbf{W}_1 \mathbf{x} + \mathbf{b}_1) \nonumber \\
+\mathbf{h}_2 &= \text{ELU}(\mathbf{W}_2 \mathbf{h}_1 + \mathbf{b}_2) \nonumber \\
+\hat{y} &= \text{sigmoid}(\mathbf{w}^{\top}_3 \mathbf{h}_2 + b_3),
+\end{align}
+where $\mathbf{x} \in R^{2 \times 1}$, $\mathbf{W}_1 \in R^{10 \times 2}$, $\mathbf{b}_1 \in R^{10 \times 1}$, $\mathbf{h}_1 \in R^{10 \times 1}$, $\mathbf{W}_2 \in R^{10 \times 10}$, $\mathbf{b}_2 \in R^{10 \times 1}$, $\mathbf{h}_2 \in R^{10 \times 1}$, $\mathbf{w}_3 \in R^{10 \times 1}$, $b_3 \in R$, and $\hat{y} \in (0, 1)$.
+
+ELU (exponential linear unit) and sigmoid are elementwise functions. Here's what they look like:
+
+```{r}
+ELU = function(x){
+  return(ifelse(x < 0, exp(x) - 1, x))
+}
+sigmoid = function(x){
+  return(1/(1+exp(-x)))
+}
+x=seq(-3, 3, length.out=100)
+plot(x, ELU(x), type="l")
+grid(lty=3, col="gray")
+plot(x, sigmoid(x), type="l")
+grid(lty=3, col="gray")
+```
+
+ELU enables the NN to model nonlinear relationships, while final sigmoid ensures that the output of the NN lives in $(0, 1)$ (i.e., represents a probability).
+
+Next, we pick an objective function and an optimizer. Below, I pick the binary cross-entropy objective (same loss from logistic regression) and the Adam optimizer (a very popular and successful stochastic gradient method):
+
+```{r}
+fnn %>% compile(
+  loss = 'binary_crossentropy',
+  optimizer = optimizer_adam(),
+  metrics = c('accuracy')
+)
+```
+
+I now fit the model.
+
+Stochastic gradient methods are iterative optimization procedures that subsample observations (without replacement) at each iteration. Each subsample is called a mini-batch; the batch_size parameter controls its size. Since we're sampling without replacement, eventually we'll run through the full data set and need to start again; one run through the entire data set is called an epoch. Setting epochs = 250 says we'll run through the full data set 250 times.
+
+If you run this in RStudio, graphs showing fitting progress should pop up. You will see the objective function decrease and the accuracy increase over time.
+
+```{r}
+history = fnn %>% fit(
+  as.matrix(X_train[,1:2]),
+  as.matrix(X_train[,3]), 
+  epochs = 250,
+  batch_size = 100
+)
+
+history_df = as.data.frame(history)
+par(mfrow=c(1,2))
+plot(history_df[history_df$metric == "loss", ]$value, type = "l",
+     xlab = "Iter.", ylab = "Binary Cross-Entropy")
+plot(history_df[history_df$metric == "accuracy", ]$value, type = "l",
+     xlab = "Iter.", ylab = "Training Set Accuracy")
+```
+
+Accuracy is higher than for logistic regression.
+
+```{r}
+preds = fnn %>% predict(as.matrix(X_test[,1:2])) %>% `>`(0.5)
+acc = length(which(preds == X_test$y)) / nrow(X_test)
+cat("FNN accuracy = ", acc)
+```
+
+You can see that the decision boundary is now curved, allowing the model to correctly classify more data points.
+
+```{r}
+grid_probs = fnn %>% predict(as.matrix(grid))
+contour(x=seq(-2, 2, length.out = 100), y=seq(0, 11, length.out = 100),
+        z = matrix(grid_probs, nrow = 100), levels = 0.5,
+        col = "gray", drawlabels = FALSE, lwd = 2,
+        xlab = "Stress", ylab = "Performance", main = "NN Decision Boundary")
+points(X_test, col=c("red", "blue")[as.factor(X_test$y)], pch = 20)
+```
+
+But what about modeling time series? We'll try a simple example: Training a recurrent neural network to distinguish between noisy sine waves with different amplitudes and frequencies. For instance, say we track $80$ peoples' moods over $100$ days. People in one group all have a mood disorder diagnosis; they have volatile moods that change quickly and are relatively extreme. The people in the other group do not have a mood disorder diagnosis; their moods change slowly and are relatively less extreme.
+
+Let's simulate this data:
+
+```{r}
+gen_sine = function(T, mul1, mul2){
+  ts = seq(0, 50, length.out=T) + rnorm(T)
+  xs = mul2*sin(mul1*ts) + rnorm(T, sin(mul1*ts), 0.5)
+  return(matrix(xs, nrow=1, ncol=T))
+}
+
+X_test = rbind(do.call(rbind, lapply(rep(100, 10), gen_sine, mul1 = 1, mul2 = 2)),
+               do.call(rbind, lapply(rep(100, 10), gen_sine, mul1 = 0.75, mul2 = 0.75))) 
+Y_test = c(rep(0, 10), rep(1, 10))
+X_train = rbind(do.call(rbind, lapply(rep(100, 30), gen_sine, mul1 = 1, mul2 = 2)),
+                do.call(rbind, lapply(rep(100, 30), gen_sine, mul1 = 0.75, mul2 = 0.75)))
+Y_train = c(rep(0, 30), rep(1, 30))
+
+par(mfrow=c(1,2))
+plot(X_train[1,], type="l", xlab = "Time",
+     ylab = "Observation", ylim = c(-4, 4), main = "Mood Disorder")
+plot(X_train[41,], type="l", xlab = "Time",
+     ylab = "Observation", ylim = c(-4, 4), main = "No Mood Disorder")
+```
+
+We want to use these mood time series to predict mood disorder vs. no mood disorder. We can do this using a recurrent neural network (RNN), an NN designed for modeling sequential data. In particular, we'll use an RNN called a gated recurrent unit (GRU). GRUs are designed to model potentially very long sequences of observations.
+
+First, we need to format the data correctly. In particular, our data will need to be formatted as a tensor, which (in this context) is a multidimensional array. Tensors are a fundamental data structure in most major deep learning libraries. For time series, our data will need to be formatted as a $3$-dimensional tensor where the first dimension represents the data set size, the second dimension represents the number of time points ($100$),  and the third dimension represents the number of predictors ($1$). All we need to do here is modeify the dimensions of our training and test set data:
+
+```{r}
+cat("Training set dimensions before reshaping: ", dim(X_train))
+
+# tensors of dim. [observations x timesteps x no. predictors]
+dim(X_test) = c(20, 100, 1)
+dim(X_train) = c(60, 100, 1)
+
+cat("Training set dimensions after reshaping: ", dim(X_train))
+```
+
+Now that the data are formatted correctly, we specify the model. layer_gru() is the GRU; it takes input of shape no. time points $\times$ no. predictors. I won't write the GRU equations here since they're relatively complicated. Our GRU outputs a hidden layer vector of size $5$, which we pass to a dense_layer() to output a prediction in $(0, 1)$.
+
+```{r}
+rnn = keras_model_sequential()
+rnn %>%
+  layer_gru(units = 5, activation = 'tanh', input_shape = c(100, 1)) %>%
+  layer_dense(units = 1, activation = 'sigmoid', input_shape = c(5))
+```
+
+We again use the binary cross-entropy objective function and the Adam optimizer. We fit the model for $50$ passes through the full training data set, using $10$ randomly sampled sequences to update the model parameters at each fitting iteration.
+
+```{r}
+rnn %>% compile(
+  loss = 'binary_crossentropy',
+  optimizer = optimizer_adam(),
+  metrics = c('accuracy')
+)
+
+history = rnn %>% fit(
+  X_train,
+  as.matrix(Y_train),
+  epochs = 100,
+  batch_size = 10
+)
+
+history_df = as.data.frame(history)
+par(mfrow=c(1,2))
+plot(history_df[history_df$metric == "loss", ]$value, type = "l",
+     xlab = "Iter.", ylab = "Binary Cross-Entropy")
+plot(history_df[history_df$metric == "accuracy", ]$value, type = "l",
+     xlab = "Iter.", ylab = "Training Set Accuracy")
+```
+
+Our GRU learns to correctly distinguish between mood disorder and no mood disorder $100\%$ of the time!
+
+```{r}
+preds = rnn %>% predict(X_test) %>% `>`(0.5)
+acc = length(which(preds == Y_test)) / length(Y_test)
+cat("RNN accuracy = ", acc)
+```
+
+
