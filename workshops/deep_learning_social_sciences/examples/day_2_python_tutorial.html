@@ -14117,7 +14117,7 @@ It's very easy to do SEM in deep learning frameworks. The fitting function can b
 Epoch: 101  mean loss: -12.42
 Epoch: 201  mean loss: -12.42
 Epoch: 301  mean loss: -12.42
-Fitting ended in 0.43 seconds
+Fitting ended in 0.47 seconds
 </pre>
 </div>
 </div>
@@ -14249,7 +14249,7 @@ Initialization ended in  0.0  seconds
 
 Fitting started
 Epoch =     1100 Iter. =     1101 Cur. loss =   12.40   Intervals no change =   10
-Fitting ended in  25.17  seconds
+Fitting ended in  27.78  seconds
 </pre>
 </div>
 </div>
@@ -14497,7 +14497,7 @@ Residual covariance matrix:
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>torch.Size([540952, 50])
 Epoch =        1 Iter. =     7401 Cur. loss = 7003.08   Intervals no change =   50
-Fitting ended in 110.11 seconds
+Fitting ended in 110.59 seconds
 </pre>
 </div>
 </div>
@@ -14660,7 +14660,7 @@ Initialization ended in  0.0  seconds
 
 Fitting started
 Epoch =        1 Iter. =     8901 Cur. loss =   72.33   Intervals no change =   50
-Fitting ended in  73.36  seconds
+Fitting ended in  71.8  seconds
 </pre>
 </div>
 </div>
@@ -14675,6 +14675,110 @@ Fitting ended in  73.36  seconds
 <p>The DeepIRTools estimates are close to the SEM estimates, although the differences are larger than for the Holzinger-Swineford example due to the extra stochasticity introduced by using mini-batch sampling. The average values across random starts for both methods would likely be quite close.</p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loadings:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">loadings</span><span class="p">,</span>
+      <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Factor covariance matrix:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">cov</span><span class="p">,</span>
+      <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Residual covariance matrix:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">residual_std</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">diag</span><span class="p">())</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>
+Loadings:
+ tensor([[0.8761, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.9460, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.8202, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.9295, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.9256, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.7333, 0.0000, 0.0000, 0.0000, 0.0000],
+        [1.0365, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.6733, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.7923, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.9434, 0.0000, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.9173, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.6535, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.6673, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.4805, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.6543, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.9212, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.9338, 0.0000, 0.0000, 0.0000],
+        [0.0000, 1.0045, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.8527, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.8556, 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.7103, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.6635, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.4515, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.8681, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.8283, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.6733, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.7649, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.6031, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.8198, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.4855, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.6741, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.8271, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.3547, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.7507, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.7548, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.9388, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.5886, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.6112, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.7413, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.4456, 0.0000],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.5532],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.5902],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.5897],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.5550],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.5843],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.5948],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.4048],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.5883],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.3053],
+        [0.0000, 0.0000, 0.0000, 0.0000, 0.7160]]) 
+
+Factor covariance matrix:
+ tensor([[ 1.0000, -0.2493,  0.3579,  0.0751,  0.2274],
+        [-0.2493,  1.0000, -0.0103, -0.2530, -0.1102],
+        [ 0.3579, -0.0103,  1.0000,  0.1108,  0.1663],
+        [ 0.0751, -0.2530,  0.1108,  1.0000,  0.0274],
+        [ 0.2274, -0.1102,  0.1663,  0.0274,  1.0000]]) 
+
+Residual covariance matrix:
+ tensor([[0.7743, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.8230, 0.0000,  ..., 0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.7074,  ..., 0.0000, 0.0000, 0.0000],
+        ...,
+        [0.0000, 0.0000, 0.0000,  ..., 1.1188, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.7851, 0.0000],
+        [0.0000, 0.0000, 0.0000,  ..., 0.0000, 0.0000, 0.4416]])
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
 </div>
 </body>
 
