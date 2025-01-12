@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="http://localhost:4000/css/workshops/2022/deep_learning_social_sciences/style.css">
+</head>
+
+<body>
+    <h1>Foundations of Deep Learning for the Social Sciences</h1>
+
+      <h2 id="overview">Overview</h2>
+
+          <img src="http://localhost:4000/images/workshops/2022/deep_learning_social_sciences/neural_net.png" width="200" style="float:right">
+
+          <p>Deep learning has revolutionized how complex processes are modeled in fields including <a href="https://en.wikipedia.org/wiki/DALL-E">computer</a> <a href="https://stability.ai/blog/stable-diffusion-public-release">vision</a>, <a href="https://en.wikipedia.org/wiki/GPT-3">natural language processing</a>, <a href="https://www.deepmind.com/research/highlighted-research/alphafold">computational biology</a>, <a href="https://www.nature.com/articles/s41586-021-03854-z">weather forecasting</a>, and <a href="https://www.deepmind.com/research/highlighted-research/alphago">game</a> <a href="https://www.nature.com/articles/nature14236">playing</a>. Despite these impressive breakthroughs, deep learning is rarely used to model complex behavioral processes in the social sciences.</p>
+
+          <p>This two-day workshop will provide a broad, practical introduction to deep learning concepts and methods, with a particular focus on the benefits and drawbacks of applying these methods to analyze behavioral data. During the first day, you will learn how to build, fit, and evaluate deep learning models for predicting behavioral outcomes. We will start the day by introducing fundamental deep learning concepts in the familiar context of logistic regression. We will finish the day with a hands-on overview of foundational deep learning models for analyzing both cross-sectional and longitudinal data.</p>
+
+          <p>During the second day, you will learn about how traditional latent variable models used in the social sciences can be enhanced using deep learning. We will begin by investigating how deep learning software and optimization methods provide a flexible framework for estimating structural equation models. We will conclude by exploring how to estimate highly flexible extensions of traditional structural equation and item response theory models in a computationally efficient manner using deep learning-based approximate inference methods.</p>
+
+    <h2 id="learn">What You Will Learn</h2>
+        <ul>
+            <li>The definition of a deep learing model</li>
+            <li>How to fit deep learning models using automatic differentiation and stochastic gradient-based optimization</li>
+            <li>How to select deep learning model hyperparameters including hidden layer sizes and learning rates</li>
+            <li>How to evaluate and compare fitted deep learning models</li>
+            <li>How to build deep learning models for predicting behavioral outcomes using both cross-sectional and longitudinal data</li>
+            <li>How to fit structural equation models using deep learning software</li>
+            <li>How to fit item response theory and other nonlinear latent variable models using deep learning-based approximate inference</li>
+        </ul>
+
+
+    <h2 id="instructor">Instructor</h2>
+
+        <p>
+            Christopher J. Urban, M.A.</br>
+            Ph.D. Candidate in <a href="https://quantpsych.unc.edu/">Quantitative Psychology</a>, Univeristy of North Carolina at Chapel Hill</br>
+            Homepage: <a href="https://cjurban.github.io/">https://cjurban.github.io/</a></br>
+            Email: <script src="http://localhost:4000/js/email.js"></script>
+        </p>
+
+    <h2 id="prereqs">Prerequisites</h2>
+
+        Necessary prerequisites:
+        <ul>
+            <li>Proficiency with <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">generalized linear models</a>, particularly <a href="https://en.wikipedia.org/wiki/Linear_regression">linear regression</a> and <a href="https://en.wikipedia.org/wiki/Logistic_regression">logistic regression</a></li>
+            <li>Proficiency in statistical programming (i.e., manipulating and analyzing data using a programming language like <a href="https://www.r-project.org/">R</a> or <a href="https://www.r-project.org/">Python</a>)</li>
+            <li>Familiarity with traditional latent variable modeling frameworks, particularly <a href="https://en.wikipedia.org/wiki/Structural_equation_modeling">structural equation modeling</a> and/or <a href="https://en.wikipedia.org/wiki/Item_response_theory">item response theory</a>
+        </ul>
+
+        Helpful (but not strictly necessary) prerequisites:
+        <ul>
+            <li>Familiarity with <a href="https://en.wikipedia.org/wiki/Linear_algebra">linear algrebra</a></li>
+            <li>Familiarity with <a href="https://en.wikipedia.org/wiki/Multivariable_calculus">multivariable calculus</a></li>
+            <li>Familiarity with basic machine learning concepts (e.g., <a href="https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)">hyperparameters</a>, <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)">cross-validation</a>)
+        </ul>
+
+  <h2 id="computing">Computing Resources</h2>
+
+    <p>We will primarily use Python 3 and some R. If you don't have Python 3, you can install it a number of ways. Options include
+    <ul>
+      <li>the official installer on <a href="https://www.python.org/">python.org</a> and</li>
+      <li>a package manager like <a href="https://www.anaconda.com/products/distribution">Anaconda</a>.</li>
+    </ul>
+    If you don't have R, you can download it from <a href="https://cran.r-project.org/">cran.r-project.org</a>. I also recommend installing <a href="https://www.rstudio.com/products/rstudio/">RStudio</a>, which is a helpful interface for writing a debugging R code.</p>
+
+    <p>We will use two deep learning frameworks: PyTorch and Tensorflow (via the Keras interface). PyTorch will be used entirely in Python and can be installed from <a href="https://pytorch.org/">pytorch.org</a>. Tensorflow will be used in both Python and R. It can be installed
+    <ul>
+      <li>via Python at <a href="https://www.tensorflow.org/install">tensorflow.org/install</a> and</li>
+      <li>via R at <a href="https://tensorflow.rstudio.com/install/">tensorflow.rstudio.com/install</a>.</li>
+    </ul></p>
+
+    <p>On the second day, we will use the Python packages <a href="https://github.com/vankesteren/tensorsem">tensorsem</a> and <a href="https://github.com/cjurban/deepirtools">DeepIRTools</a>. Once you have Python 3, these packages can be installed via <code>pip install https://github.com/vankesteren/tensorsem/archive/master.zip</code> and <code>pip install deepirtools</code>, respectively.</p>
+
+  <h2 id="schedule">Tentative Schedule</h2>
+
+    <table width="100%">
+      <tr>
+        <td width="3%"><b>&#35;</b></td>
+        <td width="5%"><b>Date</b></td>
+        <td width="15%"><b>Topic</b> </td>
+        <td width="25%"><b>Learning Outcomes</b></td>
+        <td width="25%"><b>Materials</b></td>
+        <td width="25%"><b>Supplemental Resources</b></td>
+      </tr>
+      <tr>
+        <td><b>1</b></td>
+        <td>10/6</td>
+        <td>Introduction and Foundational Deep Learning Concepts
+        </td>
+        <td>
+          You will learn:
+          <ul>
+            <li>Some achievements of modern deep learning</li>
+            <li>The definition of a deep learning model and some connections to traditional statistical models</li>
+            <li>The basics of how deep learning models are fitted including the backpropagation algorithm, automatic differentiation, and stochastic gradient-based optimization</li>
+          </ul>
+        </td>
+        <td>
+          <u>Lecture</u></br>
+            <ul>
+              <li><a href="http://localhost:4000/downloads/workshops/2022/deep_learning_social_sciences/day_1_slides.pdf.zip">Slides</a></li>
+            </ul>
+          <u>Python Coding Example</u></br>
+            <ul>
+              <li><a href="http://localhost:4000/python_tutorial_day_1">Web Page</a></li>
+              <li><a href="http://localhost:4000/downloads/workshops/2022/deep_learning_social_sciences/day_1_python_tutorial.ipynb">Notebook</a></li>
+            </ul>
+          <u>R Coding Example</u></br>
+            <ul>
+              <li><a href="http://localhost:4000/r_tutorial_day_1">Web Page</a></li>
+              <li><a href="http://localhost:4000/downloads/workshops/2022/deep_learning_social_sciences/day_1_r_tutorial.Rmd">R Markdown</a></li>
+            </ul>
+        </td>
+        <td>
+          <u>Deep Learning Overviews</u></br>
+          <ul>
+            <li>LeCun, Y., Bengio, Y., & Hinton, G. (2015). <a href="https://www.nature.com/articles/nature14539">Deep learning.</a></li>
+            <li>Urban, C. J., & Gates, K. M. (2021). <a href="https://psycnet.apa.org/record/2021-31499-001">Deep learning: A primer for psychologists.</a></li>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning</a>. Chapter 1: Introduction.</li>
+          </ul>
+          <u>Backpropagation</u></br>
+          <ul>
+            <li>Olah, C. (2015). <a href="https://colah.github.io/posts/2015-08-Backprop/">Calculus on computational graphs: Backpropagation.</a></li>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning</a>. Chapter 6: Deep feedforward networks.</li>
+          </ul>
+          <u>Stochastic Gradient Methods</u></br>
+          <ul>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning</a>. Chapter 8: Optimization for training deep models.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><b>2</b></td>
+        <td>10/6</td>
+        <td>Foundational Deep Learning Models
+        </td>
+        <td>
+          You will learn:
+          <ul>
+            <li>The definition of the multilayer perceptron (MLP) and applications to cross-sectional data</li>
+            <li>The defintion of the recurrent neural network (RNN) and applications to longitudinal data
+            <li>Why RNNs struggle with long-term dependencies and solutions based on gated architectures</li>
+            <li>The definition of the convolutional neural network (CNN) and applications to image data</li>
+            <li>Universal approximation properties of each model type</li>
+            <li>The basics of tuning neural network hyperparameters</li>
+            <li>How to evaluate and compare fitted deep learning models</li>
+          </ul>
+        </td>
+        <td>See above
+        </td>
+        <td>
+          <u>Recurrent Neural Networks</u></br>
+          <ul>
+            <li>Lipton, Z. C., Berkowitz, J., & Elkan, C. (2015). <a href="https://arxiv.org/abs/1506.00019">A critical review of recurrent neural networks for sequence learning.</a></li>
+            <li>Olah, C. (2015). <a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">Understanding LSTM networks.</a></li>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning</a>. Chapter 10: Recurrent and recursive nets.</li>
+          </ul>
+          <u>Convolutional Neural Networks</u></br>
+          <ul>
+            <li>Olah, C. (2014). <a href="https://colah.github.io/posts/2014-07-Conv-Nets-Modular/">Conv nets: A modular perspective.</a></li>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning.</a> Chapter 9: Convolutional networks.</li>
+          </ul>
+          <u>Attention</u></br>
+          <ul>
+            <li>Olah, C., & Carter, S. (2016). <a href="https://distill.pub/2016/augmented-rnns/">Attention and augmented recurrent neural networks</a>.</li>
+          </ul>
+          <u>Tuning Hyperparameters</u></br>
+          <ul>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning</a>. Chapter 11: Practical methodology.</li>
+            <li>Smith, L. N. (2018). <a href="https://arxiv.org/abs/1803.09820">A disciplined approach to neural network hyper-parameters: Part 1 -- learning rate, batch size, momentum, and weight decay</a>.</li>
+            <li>Agnihotri, A., & Batra, N. (2020). <a href="https://distill.pub/2020/bayesian-optimization/">Exploring Bayesian optimization</a>.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><b>3</b></td>
+        <td>10/7</td>
+        <td>Connections to Psychometrics
+        </td>
+        <td>
+          You will learn:
+          <ul>
+            <li>How to fit structural equation models using backpropagation and stochastic gradient-based optimization</li>
+            <li>The defintion of the autoencoder and applications</li>
+            <li>The basics of non-amortized and amortized variational inference</li>
+            <li>How to use variational methods to fit complex latent factor models</li>
+          </ul>
+        </td>
+        <td>
+          <u>Lecture</u></br>
+            <ul>
+              <li><a href="http://localhost:4000/downloads/workshops/2022/deep_learning_social_sciences/day_2_slides.pdf.zip">Slides</a></li>
+            </ul>
+          <u>Python Coding Example</u></br>
+            <ul>
+              <li><a href="http://localhost:4000/python_tutorial_day_2">Web Page</a></li>
+              <li><a href="http://localhost:4000/downloads/workshops/2022/deep_learning_social_sciences/day_2_python_tutorial.ipynb">Notebook</a></li>
+              <li><a href="http://localhost:4000/downloads/workshops/2022/deep_learning_social_sciences/data.zip">Holzinger-Swineford Data</a></li>
+            </ul>
+          <u>Other Coding Examples</u></br>
+            <ul>
+              <li><a href="https://github.com/cjurban/deepirtools/blob/master/examples/big_5_tutorial.ipynb">Modeling Big-Five Personality Factors Data</a></li>
+              <li><a href="https://github.com/cjurban/deepirtools/blob/master/examples/mnist_demo.ipynb">Generating Fake Handwriting</a></li>
+            </ul>
+        </td>
+        <td>
+          <u>Deep Learning and Structural Equation Modeling</u></br>
+          <ul>
+            <li>van Kesteren, E.-J., & Oberski, D. L. (2022). <a href="https://www.tandfonline.com/doi/full/10.1080/10705511.2021.1971527">Flexible extensions to structural equation models using computation graphs.</a></li>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning</a>. Chapter 13: Linear factor models.</li>
+          </ul>
+          <u>Autoencoders</u></br>
+          <ul>
+            <li>Goodfellow, I., Bengio, Y., & Courville, A. (2016). <a href="https://www.deeplearningbook.org/">Deep learning.</a> Chapter 14: Autoencoders.</li>
+          </ul>
+          <u>Variational Inference</u></br>
+          <ul>
+            <li>Blei, D. M., Kucukelbir, A., & McAuliffe, J. D. (2017). <a href="https://arxiv.org/abs/1601.00670">Variational inference: A review for statisticians.</a></li>
+            <li>Doersch, C. (2016). <a href="https://arxiv.org/abs/1606.05908">Tutorial on variational autoencoders.</a>
+            <li>Kingma, D. P., & Welling, M. (2019). <a href="https://arxiv.org/abs/1906.02691">An introduction to variational autoencoders.</a></li>
+          </ul>
+          <u>Deep Learning and Item Response Theory</u></br>
+          <ul>
+            <li>Curi, M., Converse, G. A., Hajewski, J., & Oliveira, S. (2019). <a href="https://ieeexplore.ieee.org/document/8852333">Interpretable variational autoencoders for cognitive models.</a></li>
+            <li>Wu, M., ..., & Goodman, N. (2020). <a href="https://arxiv.org/abs/2002.00276">Variational item response theory: Fast, accurate, expressive.</a></li>
+            <li>Urban, C. J., & Bauer, D. J. (2021). <a href="https://link.springer.com/article/10.1007/s11336-021-09748-3">A deep learning algorithm for high-dimensional exploratory item factor analysis.</a></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+
+</body>
+
+
+
+</html>

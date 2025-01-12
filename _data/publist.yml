@@ -1,0 +1,21 @@
+- title: "A Deep Learning Algorithm for High-Dimensional Exploratory Item Factor Analysis"
+  image: deep_exploratory_ifa.png
+  description: Item response theory (IRT) models are useful for measuring abstract traits such as abilities and attitudes. In this work, we use modern deep learning techniques to build high-dimensional IRT models. This approach is accurate and scales well to massive data sets.
+  authors: Christopher J. Urban, Daniel J. Bauer
+  link:
+    url: https://doi.org/10.1007/s11336-021-09748-3
+    display: Psychometrika, 2021
+  highlight: 1
+  news1:
+  news2:
+
+- title: "Deep Learning: A Primer for Psychologists"
+  image: deep_learning_primer.png
+  description: Deep learning has solved many complex problems in computer vision and in natural language processing. This work helps bring the benefits of deep learning to psychology by showing how to use deep learning to predict behavioral outcomes.
+  authors: Christopher J. Urban, Kathleen M. Gates
+  link:
+    url: https://psycnet.apa.org/record/2021-31499-001
+    display: Psychological Methods, 2021
+  highlight: 1
+  news1:
+  news2:
